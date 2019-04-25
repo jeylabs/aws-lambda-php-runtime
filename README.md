@@ -1,4 +1,6 @@
-# PHP runtime environment for AWS Lamda
+# PHP runtime environment for AWS Lambda
+This Lambda Runtime Layer runs the 7.3.4 webserver in response to AWS API Gateway or 
+AWS Application Load Balancer requests.
 
 # Why another?
 Other php runtime is tailored to API Gateway, while wanted a more "traditional"
@@ -10,7 +12,7 @@ This reduces the runtime's chance of conflicting with a given function's depende
 application code.
 
 # How to build
-The binaries must be compiled on Amazon Linux 2017.03 - which is the environment Lambda
+The binaries must be compiled on Amazon Linux 2018.03 - which is the environment Lambda
 runs in. We use docker for this purpose, so you'll need this installed.
 
 Run `make all`, and you'll end up with a `build/runtime.zip`. You can upload this zip file
@@ -24,7 +26,7 @@ ENV PHP_VERSION 7.3.4
 ```
 
 ## Uploading the runtime
-`aws lambda publish-layer-version --layer-name php-runtime-7 --zip-file fileb://build/runtime.zip`
+`aws lambda publish-layer-version --layer-name php73 --zip-file fileb://build/runtime.zip`
 
 ## Credits 
 
