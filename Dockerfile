@@ -9,15 +9,26 @@ WORKDIR /tmp
 
 RUN yum --releasever=2018.03 install \
     autoconf \
-    automake \
     libtool  \
+    gcc \
+    gcc-c++ \
     bison \
-    bison  \
     libxml2-devel \
     openssl-devel  \
     libpng-devel  \
     curl-devel  \
     libjpeg-devel -y
+
+###############################################################################
+# OPENSSL Build
+# https://github.com/openssl/openssl/releases
+
+RUN \
+    curl -sL http://www.openssl.org/source/openssl-1.0.1k.tar.gz | tar -xvz \
+    && cd openssl-1.0.1k \
+    && ./config \
+    && make \
+    && make install
 
 ###############################################################################
 # PHP Build
@@ -31,16 +42,16 @@ RUN \
 RUN mkdir -p /tmp/php-7-bin \
     && cd php-${PHP_VERSION} \
     && ./configure --prefix /tmp/php-7-bin \
-    --with-curl \
-    --with-zlib \
-    --without-libzip \
-    --with-config-file-path=/var/task/ \
-    --with-curl \
     --with-gd \
-    --with-openssl \
+    --with-zlib \
+    --with-curl \
+    --with-curl \
     --without-pear \
+    --without-libzip \
     --with-mysqli=mysqlnd \
     --with-pdo-mysql=mysqlnd \
+    --with-openssl=/usr/local/ssl \
+    --with-config-file-path=/var/task/ \
     --enable-mbstring \
     --enable-static=yes \
     --enable-shared=no \
