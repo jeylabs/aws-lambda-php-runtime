@@ -1,5 +1,5 @@
 # PHP runtime environment for AWS Lambda
-This Lambda Runtime Layer runs the 7.3.4 webserver in response to AWS API Gateway or 
+This Lambda Runtime Layer runs the 7.3.5 webserver in response to AWS API Gateway or 
 AWS Application Load Balancer requests.
 
 # Why another?
@@ -22,7 +22,7 @@ your lambda function.
 ### Building Other PHP Versions
 You may configure the version built in the Dockerfile.
 ```
-ENV PHP_VERSION 7.3.4
+ENV PHP_VERSION 7.3.5
 ```
 
 ## Uploading the runtime
