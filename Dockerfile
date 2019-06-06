@@ -8,6 +8,7 @@ FROM amazonlinux:2018.03
 WORKDIR /tmp
 
 RUN yum --releasever=2018.03 install \
+    git \
     autoconf \
     libtool  \
     gcc \
@@ -39,14 +40,14 @@ ENV PHP_VERSION 7.3.5
 RUN \
     curl -sL http://php.net/distributions/php-${PHP_VERSION}.tar.gz | tar -xvz
 
-RUN mkdir -p /tmp/php-7-bin \
+RUN \
+    mkdir -p /tmp/php-7-bin \
     && cd php-${PHP_VERSION} \
     && ./configure --prefix /tmp/php-7-bin \
     --with-gd \
     --with-zlib \
     --with-curl \
     --with-curl \
-    --without-pear \
     --without-libzip \
     --with-mysqli=mysqlnd \
     --with-pdo-mysql=mysqlnd \
@@ -70,3 +71,13 @@ RUN mkdir -p /tmp/php-7-bin \
     --enable-zip \
     --enable-opcache-file \
     && make install
+
+RUN \
+    git clone https://github.com/php/pecl-mail-mailparse.git \
+    && cd pecl-mail-mailparse \
+    && sed -i 's/#if\s!HAVE_MBSTRING/#ifndef MBFL_MBFILTER_H/' ./mailparse.c \
+    && /tmp/php-7-bin/bin/phpize \
+    && ./configure --with-php-config=/tmp/php-7-bin/bin/php-config \
+    && make \
+    && make test \
+    && mv modules/mailparse.so /tmp/php-7-bin/lib/php/extensions/no-debug-non-zts-20180731/mailparse.so \
